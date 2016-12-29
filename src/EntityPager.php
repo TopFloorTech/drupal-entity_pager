@@ -68,7 +68,7 @@ class EntityPager implements EntityPagerInterface {
 
       $entity = $this->getEntity();
 
-      if ($resultEntity->id() == $entity->id()) {
+      if (!is_null($entity) && $resultEntity->id() == $entity->id()) {
         return $index;
       }
     }
