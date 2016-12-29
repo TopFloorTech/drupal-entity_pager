@@ -23,20 +23,20 @@
  * @ingroup themeable
  */
 #}
-{%
-set classes = [
+{% set classes = [
   'views-view-entity-pager',
   'entity-pager',
   'count-word-' ~ count_word
-]
-%}
+] %}
 
 <div{{ attributes.addClass(classes) }}>
   <ul class="entity-pager-list">
     {% for key, link in links -%}
-      <li class="entity-pager-item entity-pager-item-{{ key }}">
-        {{ link }}
-      </li>
+      {% if link %}
+        <li class="entity-pager-item entity-pager-item-{{ key }}">
+          {{ link }}
+        </li>
+      {% endif %}
     {%- endfor %}
   </ul>
 </div>
