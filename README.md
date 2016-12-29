@@ -1,7 +1,5 @@
 
-=======================================================
-=============|  Description  |=========================
-=======================================================
+# Description #
 
 Provides next and previous navigation on entities.
 
@@ -15,28 +13,21 @@ create generic sub-navigation on related entities.
 
 e.g. navigate through a Brands products or go back to the Brand page itself.
 
-=======================================================
-=============|  Video Demonstration  |=================
-=======================================================
+# Video Demonstration #
 
 see: https://youtu.be/oJUcjKLz8ls
 
-=======================================================
-=============|  Installation  |========================
-=======================================================
+# Installation #
 
 Install this Drupal module as usual, see http://drupal.org/node/895232 for
 further information.
 
-=======================================================
-=============|  Instructions  |========================
-=======================================================
+# Instructions #
 
 This module works on any Entity, but for simplicity these instructions will
 walk you through adding an Entity Pager to a node.
 
-Quick Instructions:
-==================
+## Quick Instructions ##
 
 1) Create a View that lists the IDs (nid) of the nodes you wish to be part of
 your pager.
@@ -51,8 +42,7 @@ display a Pager.
 module automatically figures out all that stuff).
 
 
-Detailed Instructions
-=====================
+## Detailed Instructions ##
 
 These instructions will walk you through adding an Entity Pager to a node.
 
@@ -89,23 +79,19 @@ default sort criteria: Content: Post date (desc). Drupal normally returns the
 content in a sensible ID order without processing the Post date.
 
 
-Instructions or other Entities
-==============================
+## Instructions or other Entities ##
 
 These instructions have been created for:  Nodes
 To place an Entity Pager block for other Entities (e.g. Users) simply reread
 the instructions above replacing the work 'node' with 'user' and instead
 of 'nid' use 'uid'.
 
-=======================================================
-==========|  Instructions with Screenshots |===========
-=======================================================
+## Instructions with Screenshots ##
 
 http://www.jmokay.com/drupal/entity-pager-module
 
-=======================================================
-==========|  Demonstration Block/View |================
-=======================================================
+Demonstration Block/View
+========================
 
 When turning on this module an Entity Pager demonstration View block is
 created called: Entity Pager Example.
@@ -113,10 +99,8 @@ created called: Entity Pager Example.
 Enable this block in a region of your theme on a page with a node on. This
 will display an Entity Pager block for nodes.
 
-=======================================================
-==========|    Author     |============================
-=======================================================
+Author
+======
 
-James Lawson
-www.jmokay.com
-@JmOkay
+- James Lawson - @JmOkay - www.jmokay.com
+- Ben McClure (D8 port) - @bmcclure

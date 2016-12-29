@@ -1,9 +1,5 @@
-<?php
-
+{#
 /**
- * @file
- * Entity-pager.tpl.php.
- *
  * Adds an Entity Pager:
  * E.g.
  *    < prev  All  next >
@@ -14,19 +10,33 @@
  *
  * Default variables:
  *
+ * $count_word: The word to use for the count of items.
  * $links: An array of links to render, keyed by their class.
  *
  * $links['prev'] : link to previous node.
  * $links['all_link'] : link to All listing group of records.
  * $links['next'] : link to next node in the sequence.
  * $links['count'] : count of number of nodes in the group.
+ *
+ * @see template_preprocess_views_view_entity_pager()
+ *
+ * @ingroup themeable
  */
+#}
+{%
+set classes = [
+  'views-view-entity-pager',
+  'entity-pager',
+  'count-word-' ~ count_word
+]
+%}
 
-?>
-<ul class="entity_pager count_word_<?php print $count_word ?>">
-  <?php foreach ($links as $key => $link): ?>
-    <li class="entity_pager_<?php print $key; ?>">
-      <?php print $link ?>
-    </li>
-  <?php endforeach; ?>
-</ul>
+<div{{ attributes.addClass(classes) }}>
+  <ul class="entity-pager-list">
+    {% for key, link in links -%}
+      <li class="entity-pager-item entity-pager-item-{{ key }}">
+        {{ link }}
+      </li>
+    {%- endfor %}
+  </ul>
+</div>
