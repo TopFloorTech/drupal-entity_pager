@@ -29,6 +29,12 @@ class EntityPager extends StylePluginBase {
 
   protected $usesOptions = TRUE;
 
+  /**
+   * Returns an array of default options for the entity pager.
+   *
+   * @return array
+   *   The default options.
+   */
   protected function getDefaultOptions() {
     return [
       'link_next' => 'next >',
@@ -41,6 +47,15 @@ class EntityPager extends StylePluginBase {
     ];
   }
 
+  /**
+   * Returns a value for an option.
+   *
+   * @param string $name
+   *   The option name.
+   *
+   * @return mixed
+   *   The option value, falling back to the default.
+   */
   protected function getOption($name) {
     $defaults = $this->getDefaultOptions();
 
@@ -64,6 +79,9 @@ class EntityPager extends StylePluginBase {
       ];
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
 

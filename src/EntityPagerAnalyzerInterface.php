@@ -2,6 +2,9 @@
 
 namespace Drupal\entity_pager;
 
+/**
+ * An interface for an Entity Pager Analyzer.
+ */
 interface EntityPagerAnalyzerInterface {
 
   /**

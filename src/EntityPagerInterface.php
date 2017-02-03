@@ -7,26 +7,6 @@ use Drupal\views\ViewExecutable;
 
 /**
  * Interface EntityPagerInterface.
- *
- * Provides a base Class setup for the EntityPagerOut Class.
- * This Class contains house keeping functions for EntityPager.
- * EntityPagerOut inherits this class and does the Business Logic.
- *
- * The main things that happening in this class:
- *
- * 1) the $view is used to automatically work out the Entity & Field of interest
- * e.g. it is a Node and the nid is the field of interest.
- * e.g. it is a User and the uid is the field of interest.
- *
- * 2) now the entity type and $field of interest is established, this
- * Entity record is pulled from the database.
- *
- * 3) the specific information of interest for the web-page is then gathered up
- * and made convenient to use & quick to access.  This is done so it is easy
- * to work with when constructing the Business Logic in the sub-class
- * EntityPagerOut.
- *
- * @package Drupal\entity_pager\EntityPager
  */
 interface EntityPagerInterface {
 

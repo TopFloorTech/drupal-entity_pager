@@ -6,6 +6,9 @@ use Drupal\entity_pager\Event\EntityPagerAnalyzeEvent;
 use Drupal\entity_pager\Event\EntityPagerEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * A class for analyzing an entity pager and providing feedback.
+ */
 class EntityPagerAnalyzer implements EntityPagerAnalyzerInterface {
   /**
    * The event dispatcher.

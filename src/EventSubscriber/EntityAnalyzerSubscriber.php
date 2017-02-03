@@ -6,6 +6,10 @@ use Drupal\entity_pager\Event\EntityPagerAnalyzeEvent;
 use Drupal\entity_pager\Event\EntityPagerEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * A simple event subscriber that provides feedback about the current entity
+ * used by the entity pager.
+ */
 class EntityAnalyzerSubscriber implements EventSubscriberInterface {
 
   /**

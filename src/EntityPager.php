@@ -2,13 +2,12 @@
 
 namespace Drupal\entity_pager;
 
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\views\ResultRow;
 use Drupal\views\ViewExecutable;
 
 /**
- * Abstract class EntityPager.
+ * A class representing an entity pager.
  */
 class EntityPager implements EntityPagerInterface {
 
@@ -60,12 +59,59 @@ class EntityPager implements EntityPagerInterface {
     return $links;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getCountWord() {
+    $count = 'invalid';
+
+    if (isset($this->getView()->total_rows)) {
+      switch ($this->getView()->total_rows) {
+        case 0:
+          $count = 'none';
+          break;
+        case 1:
+          $count = 'one';
+          break;
+        default:
+          $count = 'many';
+      };
+    }
+
+    return $count;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getEntityType() {
+    return $this->getView()->getBaseEntityType()->id();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getEntity() {
+    return \Drupal::routeMatch()->getParameter($this->getEntityType());
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOptions() {
+    return $this->options;
+  }
+
+  /**
+   * Returns the currently active row from the view results.
+   *
+   * @return bool|int
+   *   The index of the active row, or FALSE
+   */
   protected function getCurrentRow() {
+    /** @var ResultRow $result */
     foreach ($this->getView()->result as $index => $result) {
-      /** @var ResultRow $result */
-
       $resultEntity = $result->_entity;
-
       $entity = $this->getEntity();
 
       if (!is_null($entity) && $resultEntity->id() == $entity->id()) {
@@ -76,6 +122,12 @@ class EntityPager implements EntityPagerInterface {
     return FALSE;
   }
 
+  /**
+   * Returns a Display All link render array.
+   *
+   * @return array
+   *   The element to render.
+   */
   protected function getAllLink() {
     $link = [];
 
@@ -96,18 +148,44 @@ class EntityPager implements EntityPagerInterface {
     return $link;
   }
 
+  /**
+   * Returns the result row at the index specified.
+   *
+   * @param int $index
+   *   The index of the result row to return from the view.
+   *
+   * @return \Drupal\views\ResultRow|null
+   *   The result row, or NULL.
+   */
   protected function getResultRow($index) {
     return isset($this->view->result[$index])
       ? $this->view->result[$index]
       : NULL;
   }
 
+  /**
+   * Returns an Entity pager link.
+   *
+   * @param string $name
+   *   The name of the link to return.
+   * @param int $offset
+   *   The offset from the current row that this link should link to.
+   *
+   * @return array
+   *   The render array for the specified link.
+   */
   protected function getLink($name, $offset = 0) {
     $link = new EntityPagerLink($this->options[$name], $this->getResultRow($this->getCurrentRow() + $offset));
 
     return $link->getLink();
   }
 
+  /**
+   * Returns a render array for a count of all items.
+   *
+   * @return array
+   *   The render array for the item count.
+   */
   protected function getCount() {
     $count = [];
 
@@ -140,53 +218,5 @@ class EntityPager implements EntityPagerInterface {
     $data = [$this->getEntityType() => $this->getEntity()];
 
     return \Drupal::token()->replace($string, $data);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCountWord() {
-    $count = 'invalid';
-
-    if (isset($this->getView()->total_rows)) {
-      switch ($this->getView()->total_rows) {
-        case 0:
-          $count = 'none';
-          break;
-        case 1:
-          $count = 'one';
-          break;
-        default:
-          $count = 'many';
-      };
-    }
-
-    return $count;
-  }
-
-  /**
-   * Returns the entity type that this pager is using.
-   *
-   * @return string
-   */
-  public function getEntityType() {
-    return $this->getView()->getBaseEntityType()->id();
-  }
-
-  /**
-   * Gets the entity object this entity pager is for.
-   *
-   * @return EntityInterface
-   *   The entity object.
-   */
-  public function getEntity() {
-    return \Drupal::routeMatch()->getParameter($this->getEntityType());
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getOptions() {
-    return $this->options;
   }
 }
