@@ -118,14 +118,14 @@ class EntityPager extends StylePluginBase {
               relates to the Entity.  e.g. [node:edit-url]</li>
               <li>The token can also be an <strong>entity reference</strong> if the entity
               has one.  e.g. [node:field_company]</li>
-          </ul>', array('@front' => '<front>')),
+          </ul>', ['@front' => '<front>']),
       '#type' => 'textfield',
       '#default_value' => $this->getOption('link_all_url'),
     ];
 
     $form['next_prev']['link_all_text'] = [
-      '#title' => t('List All label'),
-      '#description' => t("The <strong>text</strong>
+      '#title' => $this->t('List All label'),
+      '#description' => $this->t("The <strong>text</strong>
           to display for the <strong>List All URL.
           </strong>
           <ul>
@@ -142,22 +142,22 @@ class EntityPager extends StylePluginBase {
     ];
 
     $form['next_prev']['display_all'] = [
-      '#title' => t('Display All link'),
-      '#description' => t('Display a link to the parent page of all results.'),
+      '#title' => $this->t('Display All link'),
+      '#description' => $this->t('Display a link to the parent page of all results.'),
       '#type' => 'checkbox',
       '#default_value' => $this->getOption('display_all'),
     ];
 
     $form['next_prev']['display_count'] = [
-      '#title' => t('Display count'),
-      '#description' => t('Display the number of records e.g. 5 of 8'),
+      '#title' => $this->t('Display count'),
+      '#description' => $this->t('Display the number of records e.g. 5 of 8'),
       '#type' => 'checkbox',
       '#default_value' => $this->getOption('display_count'),
     ];
 
     $form['next_prev']['log_performance'] = [
-      '#title' => t('Log performance suggestions'),
-      '#description' => t('Log performance suggestions to Watchdog, see: Reports > Recent Log Messages.'),
+      '#title' => $this->t('Log performance suggestions'),
+      '#description' => $this->t('Log performance suggestions to Watchdog, see: Reports > Recent Log Messages.'),
       '#type' => 'checkbox',
       '#default_value' => $this->getOption('log_performance'),
     ];

@@ -194,7 +194,7 @@ class EntityPager implements EntityPagerInterface {
 
       $count = [
         '#type' => 'markup',
-        '#markup' => t('@cnt of <span class="total">@count</span>', [
+        '#markup' => $this->t('@cnt of <span class="total">@count</span>', [
           '@cnt' => number_format($current + 1),
           '@count' => number_format($this->view->total_rows),
         ]),
