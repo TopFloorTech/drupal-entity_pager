@@ -2,6 +2,8 @@
 
 namespace Drupal\entity_pager;
 
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\views\ResultRow;
 use Drupal\views\ViewExecutable;
@@ -10,6 +12,8 @@ use Drupal\views\ViewExecutable;
  * A class representing an entity pager.
  */
 class EntityPager implements EntityPagerInterface {
+
+  use StringTranslationTrait;
 
   /** @var array */
   protected $options = [
@@ -132,7 +136,8 @@ class EntityPager implements EntityPagerInterface {
     $link = [];
 
     if ($this->options['display_all']) {
-      $url = $this->detokenize($this->options['link_all_url']);
+      $entity = $this->getEntity();
+      $url = $this->detokenize($this->options['link_all_url'], $entity);
 
       if (!in_array(substr($url, 0, 1), ['/', '#', '?'])) {
         $url = '/' . $url;
@@ -140,7 +145,7 @@ class EntityPager implements EntityPagerInterface {
 
       $link = [
         '#type' => 'link',
-        '#title' => $this->detokenize($this->options['link_all_text']),
+        '#title' => $this->detokenize($this->options['link_all_text'], $entity),
         '#url' => Url::fromUserInput($url),
       ];
     }
@@ -175,7 +180,9 @@ class EntityPager implements EntityPagerInterface {
    *   The render array for the specified link.
    */
   protected function getLink($name, $offset = 0) {
-    $link = new EntityPagerLink($this->options[$name], $this->getResultRow($this->getCurrentRow() + $offset));
+    $row = $this->getResultRow($this->getCurrentRow() + $offset);
+    $title = $this->detokenize($this->options[$name], $row->_entity);
+    $link = new EntityPagerLink($title, $row);
 
     return $link->getLink();
   }
@@ -210,13 +217,16 @@ class EntityPager implements EntityPagerInterface {
    *
    * @param string $string
    *   The string to detokenize.
+   * @param EntityInterface $entity
+   *   The entity to use for detokenization.
    *
    * @return string
    *   The detokenized string.
    */
-  protected function detokenize($string) {
-    $data = [$this->getEntityType() => $this->getEntity()];
+  protected function detokenize($string, $entity) {
+    $data = [$entity->getEntityTypeId() => $entity];
 
     return \Drupal::token()->replace($string, $data);
   }
+
 }
