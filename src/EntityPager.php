@@ -5,6 +5,7 @@ namespace Drupal\entity_pager;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\Core\Utility\Token;
 use Drupal\views\ResultRow;
 use Drupal\views\ViewExecutable;
 
@@ -15,19 +16,13 @@ class EntityPager implements EntityPagerInterface {
 
   use StringTranslationTrait;
 
-  /** @var array */
-  protected $options = [
-    'link_next' => 'next >',
-    'link_prev' => '< prev',
-    'link_all_url' => '<front>',
-    'link_all_text' => 'Home',
-    'display_all' => TRUE,
-    'display_count' => TRUE,
-    'log_performance' => TRUE,
-  ];
+  protected $options;
 
-  /** @var ViewExecutable */
+  /** @var ViewExecutable The view executable. */
   protected $view;
+
+  /** @var \Drupal\Core\Utility\Token The token service. */
+  protected $token;
 
   /**
    * EntityPager constructor.
@@ -36,10 +31,13 @@ class EntityPager implements EntityPagerInterface {
    *   The view object.
    * @param array $options
    *   An array of options for the EntityPager.
+   * @param \Drupal\Core\Utility\Token $token
+   *   The token service.
    */
-  public function __construct(ViewExecutable $view, $options = []) {
+  public function __construct(ViewExecutable $view, $options, Token $token) {
     $this->view = $view;
-    $this->options = $options + $this->options;
+    $this->options = $options;
+    $this->token = $token;
   }
 
   /**
@@ -181,7 +179,13 @@ class EntityPager implements EntityPagerInterface {
    */
   protected function getLink($name, $offset = 0) {
     $row = $this->getResultRow($this->getCurrentRow() + $offset);
-    $title = $this->detokenize($this->options[$name], $row->_entity);
+
+    $title = $this->options[$name];
+
+    if (is_object($row)) {
+      $title = $this->detokenize($title, $row->_entity);
+    }
+
     $link = new EntityPagerLink($title, $row);
 
     return $link->getLink();
@@ -224,9 +228,13 @@ class EntityPager implements EntityPagerInterface {
    *   The detokenized string.
    */
   protected function detokenize($string, $entity) {
+    if (is_null($entity)) {
+      $entity = $this->getEntity();
+    }
+
     $data = [$entity->getEntityTypeId() => $entity];
 
-    return \Drupal::token()->replace($string, $data);
+    return $this->token->replace($string, $data);
   }
 
 }
