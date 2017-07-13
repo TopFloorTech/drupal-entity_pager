@@ -43,6 +43,7 @@ class EntityPager extends StylePluginBase {
       'link_all_text' => 'Home',
       'display_all' => TRUE,
       'display_count' => TRUE,
+      'show_disabled_links' => TRUE,
       'log_performance' => TRUE,
     ];
   }
@@ -76,6 +77,7 @@ class EntityPager extends StylePluginBase {
         'display_all' => ['default' => $defaults['display_all']],
         'display_count' => ['default' => $defaults['display_count']],
         'log_performance' => ['default' => $defaults['log_performance']],
+        'show_disabled_links' => ['default' => $defaults['show_disabled_links']]
       ];
   }
 
@@ -153,6 +155,13 @@ class EntityPager extends StylePluginBase {
       '#description' => $this->t('Display the number of records e.g. 5 of 8'),
       '#type' => 'checkbox',
       '#default_value' => $this->getOption('display_count'),
+    ];
+
+    $form['next_prev']['show_disabled_links'] = [
+      '#title' => $this->t('Show disabled links'),
+      '#description' => $this->t('Show disabled next/prev links when on the first or last page.'),
+      '#type' => 'checkbox',
+      '#default_value' => $this->getOption('show_disabled_links'),
     ];
 
     $form['next_prev']['log_performance'] = [

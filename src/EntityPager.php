@@ -179,16 +179,19 @@ class EntityPager implements EntityPagerInterface {
    */
   protected function getLink($name, $offset = 0) {
     $row = $this->getResultRow($this->getCurrentRow() + $offset);
+    $disabled = !is_object($row);
+    $entity = $disabled ? $this->getEntity() : $row->_entity;
 
-    $title = $this->options[$name];
+    $title = $title = $this->detokenize($this->options[$name], $entity);
 
-    if (is_object($row)) {
-      $title = $this->detokenize($title, $row->_entity);
+    if (!$disabled || $this->options['show_disabled_links']) {
+      $pager_link = new EntityPagerLink($title, $row);
+      $link = $pager_link->getLink();
+    } else {
+      $link = [];
     }
 
-    $link = new EntityPagerLink($title, $row);
-
-    return $link->getLink();
+    return $link;
   }
 
   /**

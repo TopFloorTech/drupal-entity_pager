@@ -18,6 +18,7 @@ class EntityPagerFactory {
     'link_all_text' => 'Home',
     'display_all' => TRUE,
     'display_count' => TRUE,
+    'show_disabled_links' => TRUE,
     'log_performance' => TRUE,
   ];
 
