@@ -143,7 +143,7 @@ class EntityPager implements EntityPagerInterface {
 
       $link = [
         '#type' => 'link',
-        '#title' => $this->detokenize($this->options['link_all_text'], $entity),
+        '#title' => ['#markup' => $this->detokenize($this->options['link_all_text'], $entity)],
         '#url' => Url::fromUserInput($url),
       ];
     }

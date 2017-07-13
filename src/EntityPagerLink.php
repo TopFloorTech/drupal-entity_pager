@@ -42,7 +42,7 @@ class EntityPagerLink implements EntityPagerLinkInterface {
 
     return [
       '#type' => 'link',
-      '#title' => $this->text,
+      '#title' => ['#markup' => $this->text],
       '#url' => $this->resultRow->_entity->getTranslation(\Drupal::languageManager()->getCurrentLanguage()->getId())->toUrl('canonical'),
     ];
   }
