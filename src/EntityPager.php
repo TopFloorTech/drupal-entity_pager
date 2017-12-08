@@ -239,7 +239,10 @@ class EntityPager implements EntityPagerInterface {
       $entity = $this->getEntity();
     }
 
-    $data = [$entity->getEntityTypeId() => $entity];
+    $data = [];
+    if ($entity instanceof EntityInterface) {
+      $data[$entity->getEntityTypeId()] = $entity;
+    }
 
     return $this->token->replace($string, $data);
   }
