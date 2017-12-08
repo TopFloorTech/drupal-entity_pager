@@ -117,7 +117,7 @@ class EntityPager implements EntityPagerInterface {
   protected function getCurrentRow() {
     /** @var ResultRow $result */
     foreach ($this->getView()->result as $index => $result) {
-      $resultEntity = $result->_entity;
+      $resultEntity = $this->getResultEntity($result);
       $entity = $this->getEntity();
 
       if (!is_null($entity) && $resultEntity->id() == $entity->id()) {
@@ -126,6 +126,30 @@ class EntityPager implements EntityPagerInterface {
     }
 
     return FALSE;
+  }
+
+  /**
+   * Returns the result row at the index specified.
+   *
+   * @param int $index
+   *   The index of the result row to return from the view.
+   *
+   * @return \Drupal\views\ResultRow|null
+   *   The result row, or NULL.
+   */
+  protected function getResultRow($index) {
+    $result_row = NULL;
+
+    if (isset($this->view->result[$index])) {
+      $result_row = $this->view->result[$index];
+    }
+    elseif ($this->options['circular_paging']) {
+      $result_row = $index < 0
+        ? $this->view->result[count($this->view->result) - 1]
+        : $this->view->result[0];
+    }
+
+    return $result_row;
   }
 
   /**
@@ -156,30 +180,6 @@ class EntityPager implements EntityPagerInterface {
   }
 
   /**
-   * Returns the result row at the index specified.
-   *
-   * @param int $index
-   *   The index of the result row to return from the view.
-   *
-   * @return \Drupal\views\ResultRow|null
-   *   The result row, or NULL.
-   */
-  protected function getResultRow($index) {
-    $result_row = NULL;
-
-    if (isset($this->view->result[$index])) {
-      $result_row = $this->view->result[$index];
-    }
-    elseif ($this->options['circular_paging']) {
-      $result_row = $index < 0
-        ? $this->view->result[count($this->view->result) - 1]
-        : $this->view->result[0];
-    }
-
-    return $result_row;
-  }
-
-  /**
    * Returns an Entity pager link.
    *
    * @param string $name
@@ -193,12 +193,12 @@ class EntityPager implements EntityPagerInterface {
   protected function getLink($name, $offset = 0) {
     $row = $this->getResultRow($this->getCurrentRow() + $offset);
     $disabled = !is_object($row);
-    $entity = $disabled ? $this->getEntity() : $row->_entity;
+    $entity = $disabled ? $this->getEntity() : $this->getResultEntity($row);
 
     $title = $this->detokenize($this->options[$name], $entity);
 
     if (!$disabled || $this->options['show_disabled_links']) {
-      $pager_link = new EntityPagerLink($title, $row);
+      $pager_link = new EntityPagerLink($title, $entity);
       $link = $pager_link->getLink();
     } else {
       $link = [];
@@ -254,6 +254,21 @@ class EntityPager implements EntityPagerInterface {
     }
 
     return $this->token->replace($string, $data);
+  }
+
+  /**
+   * Get the entity from the current views row.
+   *
+   * @param \Drupal\views\ResultRow $row
+   *   The views result row object.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface
+   *   The content entity from the result.
+   */
+  protected function getResultEntity(ResultRow $row) {
+    return $this->options['relationship']
+      ? $row->_relationship_entities[$this->options['relationship']]
+      : $row->_entity;
   }
 
 }

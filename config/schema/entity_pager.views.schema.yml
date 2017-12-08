@@ -2,6 +2,9 @@ views.style.entity_pager:
   type: views_style
   label: 'Entity Pager'
   mapping:
+    relationship:
+      type: string
+      label: 'Relationship'
     link_next:
       type: label
       label: 'Next label'

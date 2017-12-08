@@ -2,9 +2,9 @@
 
 namespace Drupal\entity_pager;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\TypedData\TranslatableInterface;
-use Drupal\views\ResultRow;
 
 /**
  * A class representing a single Entity Pager link.
@@ -14,9 +14,9 @@ class EntityPagerLink implements EntityPagerLinkInterface {
   use StringTranslationTrait;
 
   /**
-   * @var \Drupal\views\ResultRow|NULL
+   * @var \Drupal\Core\Entity\EntityInterface|NULL
    */
-  var $resultRow;
+  var $entity;
 
   /**
    * @var string
@@ -28,24 +28,24 @@ class EntityPagerLink implements EntityPagerLinkInterface {
    *
    * @param string $text
    *   The text of the link
-   * @param \Drupal\views\ResultRow|NULL $resultRow
+   * @param \Drupal\Core\Entity\EntityInterface|NULL $entity
    *   The result row in the view to link to.
    */
-  public function __construct($text, ResultRow $resultRow = NULL) {
+  public function __construct($text, EntityInterface $entity = NULL) {
     $this->text = $text;
-    $this->resultRow = $resultRow;
+    $this->entity = $entity;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getLink() {
-    if (empty($this->resultRow)) {
+    if (empty($this->entity)) {
       return $this->noResult();
     }
 
     $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    $entity = $this->resultRow->_entity;
+    $entity = $this->entity;
     if ($entity instanceof TranslatableInterface && $entity->hasTranslation($langcode)) {
       $entity = $entity->getTranslation($langcode);
     }

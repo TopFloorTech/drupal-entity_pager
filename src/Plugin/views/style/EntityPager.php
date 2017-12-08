@@ -37,6 +37,7 @@ class EntityPager extends StylePluginBase {
    */
   protected function getDefaultOptions() {
     return [
+      'relationship' => NULL,
       'link_next' => 'next >',
       'link_prev' => '< prev',
       'link_all_url' => '<front>',
@@ -71,6 +72,7 @@ class EntityPager extends StylePluginBase {
     $defaults = $this->getDefaultOptions();
 
     return parent::defineOptions() + [
+        'relationship' => ['default' => $defaults['relationship']],
         'link_next' => ['default' => $defaults['link_next']],
         'link_prev' => ['default' => $defaults['link_prev']],
         'link_all_url' => ['default' => $defaults['link_all_url']],
@@ -88,6 +90,18 @@ class EntityPager extends StylePluginBase {
    */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
+
+    $relationship_options = $this->getRelationshipOptions();
+    if (!empty($relationship_options)) {
+      $form['relationship'] = [
+        '#title' => $this->t('Relationship'),
+        '#description' => $this->t('Optionally, select a relationship to link to the related entity.'),
+        '#type' => 'select',
+        '#options' => $relationship_options,
+        '#empty_option' => $this->t('None'),
+        '#default_value' => $this->getOption('relationship'),
+      ];
+    }
 
     $form['link_next'] = [
       '#title' => $this->t('Next label'),
@@ -178,6 +192,20 @@ class EntityPager extends StylePluginBase {
       '#type' => 'checkbox',
       '#default_value' => $this->getOption('log_performance'),
     ];
+  }
+
+  protected function getRelationshipOptions() {
+    $executable = $this->view;
+    $relationships = $executable->display_handler->getOption('relationships');
+    $options = [];
+
+    if (!empty($relationships)) {
+      foreach ($relationships as $relationship) {
+        $options[$relationship['id']] = $relationship['admin_label'];
+      }
+    }
+
+    return $options;
   }
 
 }
