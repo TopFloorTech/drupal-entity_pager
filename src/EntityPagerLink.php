@@ -2,12 +2,16 @@
 
 namespace Drupal\entity_pager;
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\TypedData\TranslatableInterface;
 use Drupal\views\ResultRow;
 
 /**
  * A class representing a single Entity Pager link.
  */
 class EntityPagerLink implements EntityPagerLinkInterface {
+
+  use StringTranslationTrait;
 
   /**
    * @var \Drupal\views\ResultRow|NULL
@@ -40,10 +44,17 @@ class EntityPagerLink implements EntityPagerLinkInterface {
       return $this->noResult();
     }
 
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $text = $this->t($this->text, [], ['langcode' => $langcode]);
+    $entity = $this->resultRow->_entity;
+    if ($entity instanceof TranslatableInterface && $entity->hasTranslation($langcode)) {
+      $entity = $entity->getTranslation($langcode);
+    }
+
     return [
       '#type' => 'link',
-      '#title' => ['#markup' => $this->text],
-      '#url' => $this->resultRow->_entity->getTranslation(\Drupal::languageManager()->getCurrentLanguage()->getId())->toUrl('canonical'),
+      '#title' => ['#markup' => $text],
+      '#url' => $entity->toUrl('canonical'),
     ];
   }
 
@@ -56,7 +67,7 @@ class EntityPagerLink implements EntityPagerLinkInterface {
   protected function noResult() {
     return [
       '#type' => 'markup',
-      '#markup' => '<span class="inactive">' . $this->text . '</span>',
+      '#markup' => '<span class="inactive">' . $this->t($this->text) . '</span>',
     ];
   }
 }
