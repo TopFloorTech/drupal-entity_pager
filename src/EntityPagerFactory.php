@@ -33,7 +33,10 @@ class EntityPagerFactory {
   }
 
   public function get(ViewExecutable $view, $options = []) {
-    return new EntityPager($view, $options + $this->default_options, $this->token);
-  }
+    $options = (empty($options))
+      ? $this->default_options
+      : array_merge($options, $this->default_options);
 
+    return new EntityPager($view, $options, $this->token);
+  }
 }
