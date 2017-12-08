@@ -54,14 +54,13 @@ display:
         type: entity_pager
         options:
           grouping: {  }
-          next_prev:
-            link_next: 'next >'
-            link_prev: '< prev'
-            link_all_url: '<front>'
-            link_all_text: Home
-            display_all: 1
-            display_count: 1
-            log_performance: 1
+          link_next: 'next >'
+          link_prev: '< prev'
+          link_all_url: '<front>'
+          link_all_text: Home
+          display_all: 1
+          display_count: 1
+          log_performance: 1
       row:
         type: fields
       fields:

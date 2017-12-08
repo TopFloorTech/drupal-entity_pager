@@ -34,7 +34,7 @@ function template_preprocess_entity_pager(&$variables) {
   /** @var \Drupal\entity_pager\EntityPagerFactory $factory */
   $factory = \Drupal::service('entity_pager.factory');
 
-  $entityPager = $factory->get($variables['view'], $options['next_prev']);
+  $entityPager = $factory->get($variables['view'], $options);
 
   $variables['links'] = $entityPager->getLinks();
   $variables['count_word'] = $entityPager->getCountWord();

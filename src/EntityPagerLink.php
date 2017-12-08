@@ -45,7 +45,6 @@ class EntityPagerLink implements EntityPagerLinkInterface {
     }
 
     $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    $text = $this->t($this->text, [], ['langcode' => $langcode]);
     $entity = $this->resultRow->_entity;
     if ($entity instanceof TranslatableInterface && $entity->hasTranslation($langcode)) {
       $entity = $entity->getTranslation($langcode);
@@ -53,7 +52,7 @@ class EntityPagerLink implements EntityPagerLinkInterface {
 
     return [
       '#type' => 'link',
-      '#title' => ['#markup' => $text],
+      '#title' => ['#markup' => $this->text],
       '#url' => $entity->toUrl('canonical'),
     ];
   }
@@ -67,7 +66,7 @@ class EntityPagerLink implements EntityPagerLinkInterface {
   protected function noResult() {
     return [
       '#type' => 'markup',
-      '#markup' => '<span class="inactive">' . $this->t($this->text) . '</span>',
+      '#markup' => '<span class="inactive">' . $this->text . '</span>',
     ];
   }
 }
