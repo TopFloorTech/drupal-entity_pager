@@ -186,7 +186,7 @@ class EntityPager implements EntityPagerInterface {
     $disabled = !is_object($row);
     $entity = $disabled ? $this->getEntity() : $row->_entity;
 
-    $title = $title = $this->detokenize($this->options[$name], $entity);
+    $title = $this->detokenize($this->options[$name], $entity);
 
     if (!$disabled || $this->options['show_disabled_links']) {
       $pager_link = new EntityPagerLink($title, $row);
