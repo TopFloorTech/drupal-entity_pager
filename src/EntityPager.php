@@ -165,9 +165,18 @@ class EntityPager implements EntityPagerInterface {
    *   The result row, or NULL.
    */
   protected function getResultRow($index) {
-    return isset($this->view->result[$index])
-      ? $this->view->result[$index]
-      : NULL;
+    $result_row = NULL;
+
+    if (isset($this->view->result[$index])) {
+      $result_row = $this->view->result[$index];
+    }
+    elseif ($this->options['circular_paging']) {
+      $result_row = $index < 0
+        ? $this->view->result[count($this->view->result) - 1]
+        : $this->view->result[0];
+    }
+
+    return $result_row;
   }
 
   /**

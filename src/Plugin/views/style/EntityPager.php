@@ -44,6 +44,7 @@ class EntityPager extends StylePluginBase {
       'display_all' => TRUE,
       'display_count' => TRUE,
       'show_disabled_links' => TRUE,
+      'circular_paging' => FALSE,
       'log_performance' => TRUE,
     ];
   }
@@ -76,8 +77,9 @@ class EntityPager extends StylePluginBase {
         'link_all_text' => ['default' => $defaults['link_all_text']],
         'display_all' => ['default' => $defaults['display_all']],
         'display_count' => ['default' => $defaults['display_count']],
+        'show_disabled_links' => ['default' => $defaults['show_disabled_links']],
+        'circular_paging' => ['default' => $defaults['circular_paging']],
         'log_performance' => ['default' => $defaults['log_performance']],
-        'show_disabled_links' => ['default' => $defaults['show_disabled_links']]
       ];
   }
 
@@ -101,8 +103,15 @@ class EntityPager extends StylePluginBase {
       '#default_value' => $this->getOption('link_prev'),
     ];
 
+    $form['display_all'] = [
+      '#title' => $this->t('Display All link'),
+      '#description' => $this->t('Display a link to the parent page of all results.'),
+      '#type' => 'checkbox',
+      '#default_value' => $this->getOption('display_all'),
+    ];
+
     $form['link_all_url'] = [
-      '#title' => $this->t('List All URL'),
+      '#title' => $this->t('All link URL'),
       '#description' => $this->t('The URL of the listing page link.<br>
           Examples:
           <ul>
@@ -113,10 +122,15 @@ class EntityPager extends StylePluginBase {
           </ul>', ['@front' => '<front>']),
       '#type' => 'textfield',
       '#default_value' => $this->getOption('link_all_url'),
+      '#states' => [
+        'visible' => [
+          ':input[name="style_options[display_all]"]' => ['checked' => TRUE],
+        ]
+      ],
     ];
 
     $form['link_all_text'] = [
-      '#title' => $this->t('List All label'),
+      '#title' => $this->t('All link label'),
       '#description' => $this->t("The label text to display for the List All link.
           <ul>
               <li>When an entity reference is used in the <strong>List All URL</strong> box above, just add the same entity reference in this box and the referenced entity title will automatically be displayed.</li>
@@ -125,13 +139,11 @@ class EntityPager extends StylePluginBase {
       ),
       '#type' => 'textfield',
       '#default_value' => $this->getOption('link_all_text'),
-    ];
-
-    $form['display_all'] = [
-      '#title' => $this->t('Display All link'),
-      '#description' => $this->t('Display a link to the parent page of all results.'),
-      '#type' => 'checkbox',
-      '#default_value' => $this->getOption('display_all'),
+      '#states' => [
+        'visible' => [
+          ':input[name="style_options[display_all]"]' => ['checked' => TRUE],
+        ]
+      ],
     ];
 
     $form['display_count'] = [
@@ -141,11 +153,23 @@ class EntityPager extends StylePluginBase {
       '#default_value' => $this->getOption('display_count'),
     ];
 
+    $form['circular_paging'] = [
+      '#title' => $this->t('Circular paging'),
+      '#description' => $this->t('When the last item is active, link to first item and vice versa.'),
+      '#type' => 'checkbox',
+      '#default_value' => $this->getOption('circular_paging'),
+    ];
+
     $form['show_disabled_links'] = [
       '#title' => $this->t('Show disabled links'),
       '#description' => $this->t('Show disabled next/prev links when on the first or last page.'),
       '#type' => 'checkbox',
       '#default_value' => $this->getOption('show_disabled_links'),
+      '#states' => [
+        'visible' => [
+          ':input[name="style_options[circular_paging]"]' => ['checked' => FALSE],
+        ]
+      ],
     ];
 
     $form['log_performance'] = [

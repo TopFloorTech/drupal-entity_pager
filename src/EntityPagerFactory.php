@@ -19,6 +19,7 @@ class EntityPagerFactory {
     'display_all' => TRUE,
     'display_count' => TRUE,
     'show_disabled_links' => TRUE,
+    'circular_paging' => FALSE,
     'log_performance' => TRUE,
   ];
 
