@@ -47,8 +47,8 @@ interface EntityPagerInterface {
   /**
    * Gets the entity object this entity pager is for.
    *
-   * @return EntityInterface
-   *   The entity object.
+   * @return EntityInterface|NULL
+   *   The entity object or NULL if no entity found.
    */
   public function getEntity();
 

@@ -94,7 +94,11 @@ class EntityPager implements EntityPagerInterface {
    * {@inheritdoc}
    */
   public function getEntity() {
-    return \Drupal::routeMatch()->getParameter($this->getEntityType());
+    $entity = \Drupal::routeMatch()->getParameter($this->getEntityType());
+    if (is_null($entity) && \Drupal::request()->attributes->has('entity')) {
+      $entity = \Drupal::request()->attributes->get('entity');
+    }
+    return $entity;
   }
 
   /**
