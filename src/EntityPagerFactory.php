@@ -35,7 +35,7 @@ class EntityPagerFactory {
   public function get(ViewExecutable $view, $options = []) {
     $options = (empty($options))
       ? $this->default_options
-      : array_merge($options, $this->default_options);
+      : array_merge($this->default_options, $options);
 
     return new EntityPager($view, $options, $this->token);
   }
