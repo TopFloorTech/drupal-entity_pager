@@ -38,13 +38,6 @@ interface EntityPagerInterface {
   public function getCountWord();
 
   /**
-   * Returns the entity type that this pager is using.
-   *
-   * @return string
-   */
-  public function getEntityType();
-
-  /**
    * Gets the entity object this entity pager is for.
    *
    * @return EntityInterface|NULL
