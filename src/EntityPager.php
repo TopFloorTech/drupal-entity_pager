@@ -16,6 +16,7 @@ class EntityPager implements EntityPagerInterface {
 
   use StringTranslationTrait;
 
+  /** @var array The options. */
   protected $options;
 
   /** @var ViewExecutable The view executable. */
@@ -51,14 +52,12 @@ class EntityPager implements EntityPagerInterface {
    * {@inheritdoc}
    */
   public function getLinks() {
-    $links = [
+    return [
       'prev' => $this->getLink('link_prev', -1),
       'all' => $this->getAllLink(),
       'next' => $this->getLink('link_next', 1),
       'count' => $this->getCount(),
     ];
-
-    return $links;
   }
 
   /**
@@ -68,16 +67,14 @@ class EntityPager implements EntityPagerInterface {
     $count = 'invalid';
 
     if (isset($this->getView()->total_rows)) {
-      switch ($this->getView()->total_rows) {
-        case 0:
-          $count = 'none';
-          break;
-        case 1:
-          $count = 'one';
-          break;
-        default:
-          $count = 'many';
-      };
+      $total = $this->getView()->total_rows;
+      if ($total === 0) {
+        $count = 'none';
+      } elseif ($total === 1) {
+        $count = 'one';
+      } else {
+        $count = 'many';
+      }
     }
 
     return $count;
@@ -120,7 +117,7 @@ class EntityPager implements EntityPagerInterface {
       $resultEntity = $this->getResultEntity($result);
       $entity = $this->getEntity();
 
-      if (!is_null($entity) && $resultEntity->id() == $entity->id()) {
+      if (!is_null($entity) && $resultEntity->id() === $entity->id()) {
         return $index;
       }
     }
