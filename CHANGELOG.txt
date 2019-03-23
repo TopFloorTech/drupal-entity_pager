@@ -1,3 +1,8 @@
+Entity Pager 8.x-1.0-beta2, 2019-03-23
+--------------------------------------
+#3003045 by chipway, alonaoneill: All dependencies must be prefixed
+#2982840 by alaa abbad, bmcclure: Support views that aren't associated with a specific entity type
+
 Entity Pager 8.x-1.0-beta1, 2018-08-01
 --------------------------------------
 #2928931 by Leon Kessler, bmcclure: Views relationships not working
